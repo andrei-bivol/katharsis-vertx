@@ -1,0 +1,5 @@
+= Katharsis integration for Vertx.io
+
+Integration and example code.
+
+Work in progress.
