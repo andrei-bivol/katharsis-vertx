@@ -7,6 +7,20 @@ Integration and example code.
 Work in progress.
 ====
 
+== Running
+
+The project uses link:https://gradle.org/[Gradle] as a build tool.
+
+In your terminal run these commands:
+----
+ git clone git@github.com:netdava/katharsis-vertx.git
+ ./gradlew build
+ ./gradlew run
+ echo "Please visit localhost:8080/api/projects or localhost:8080/api/tasks"
+----
+
+Visit link:localhost:8080/api/projects[] .
+
 == Contributing
 
 This project uses link:https://github.com/nvie/gitflow[Git Flow].

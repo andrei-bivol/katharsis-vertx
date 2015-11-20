@@ -22,11 +22,10 @@ public class KatharsisVerticle extends AbstractVerticle {
         // Bind "/" to our hello message - so we are still compatible.
         router.route("/").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
-            response
-                    .putHeader("content-type", "text/html")
-                    .end("<h1>Hello from my first Vert.x 3 application</h1>");
+            response.putHeader("content-type", "text/html")
+                    .write("<h1>Hello from my first Vert.x 3 application</h1>")
+                    .end("<a href='localhost:8080/api/projects'>localhost:8080/api/projects</a>");
         });
-
 
         KatharsisGlue katharsisGlue = KatharsisGlue.create(Main.class.getPackage().getName(), "/api");
 
