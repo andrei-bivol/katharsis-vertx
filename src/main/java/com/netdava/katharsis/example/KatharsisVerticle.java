@@ -31,6 +31,7 @@ public class KatharsisVerticle extends AbstractVerticle {
         KatharsisGlue katharsisGlue = KatharsisGlue.create(Main.class.getPackage().getName(), "/api");
 
         router.mountSubRouter("/api/projects", KatharsisRestApi.createRouter(vertx, katharsisGlue));
+        router.mountSubRouter("/api/tasks", KatharsisRestApi.createRouter(vertx, katharsisGlue));
 
         // Create the HTTP server and pass the "accept" method to the request handler.
         vertx.createHttpServer()
