@@ -1,5 +1,7 @@
-package com.netdava.khatarsis.example;
+package com.netdava.katharsis.example;
 
+import com.netdava.katharsis.KatharsisGlue;
+import com.netdava.katharsis.KatharsisRestApi;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -24,6 +26,11 @@ public class KatharsisVerticle extends AbstractVerticle {
                     .putHeader("content-type", "text/html")
                     .end("<h1>Hello from my first Vert.x 3 application</h1>");
         });
+
+
+        KatharsisGlue katharsisGlue = KatharsisGlue.create(Main.class.getPackage().getName(), "/api");
+
+        router.mountSubRouter("/api/projects", KatharsisRestApi.createRouter(vertx, katharsisGlue));
 
         // Create the HTTP server and pass the "accept" method to the request handler.
         vertx.createHttpServer()

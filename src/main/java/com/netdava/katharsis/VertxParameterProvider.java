@@ -1,4 +1,4 @@
-package com.netdava.khatarsis;
+package com.netdava.katharsis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.katharsis.repository.RepositoryMethodParameterProvider;

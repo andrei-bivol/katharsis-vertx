@@ -1,6 +1,5 @@
 package com.netdava.katharsis;
 
-import com.netdava.khatarsis.KatharsisGlue;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Before;

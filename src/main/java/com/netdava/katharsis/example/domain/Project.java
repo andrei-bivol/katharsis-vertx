@@ -1,4 +1,4 @@
-package com.netdava.khatarsis.example.domain;
+package com.netdava.katharsis.example.domain;
 
 import io.katharsis.resource.annotations.JsonApiId;
 import io.katharsis.resource.annotations.JsonApiResource;

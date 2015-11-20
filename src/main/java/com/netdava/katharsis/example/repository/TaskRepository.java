@@ -1,6 +1,6 @@
-package com.netdava.khatarsis.example.repository;
+package com.netdava.katharsis.example.repository;
 
-import com.netdava.khatarsis.example.domain.Task;
+import com.netdava.katharsis.example.domain.Task;
 import io.katharsis.queryParams.QueryParams;
 import io.katharsis.repository.ResourceRepository;
 

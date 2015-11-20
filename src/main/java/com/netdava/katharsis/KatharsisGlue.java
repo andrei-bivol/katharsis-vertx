@@ -1,4 +1,4 @@
-package com.netdava.khatarsis;
+package com.netdava.katharsis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
@@ -32,6 +32,7 @@ import io.vertx.core.json.Json;
 import io.vertx.ext.web.RoutingContext;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -41,12 +42,16 @@ import java.util.Map;
 import java.util.Set;
 
 @Data
+@Slf4j
 public class KatharsisGlue {
+
 
     private final ObjectMapper objectMapper;
     private ResourceRegistry resourceRegistry;
     private JsonServiceLocator jsonServiceLocator;
     private TypeParser typeParser;
+
+    private String webPath;
 
     private ExceptionMapperRegistry exceptionMapperRegistry;
     private PathBuilder pathBuilder;
@@ -75,15 +80,18 @@ public class KatharsisGlue {
 
     public static KatharsisGlue create(@NonNull String packagesToScan, @NonNull String webPath) {
         KatharsisGlue katharsisGlue = new KatharsisGlue(Json.mapper);
+        katharsisGlue.setWebPath(webPath);
         return katharsisGlue.configure(packagesToScan, webPath);
     }
 
     public JsonPath buildPath(String path) {
-        return pathBuilder.buildPath(path);
+        String transformed = path.substring(webPath.length());
+        log.info("Path is {}", transformed);
+        return pathBuilder.buildPath(transformed);
     }
 
     public JsonPath buildPath(RoutingContext ctx) {
-        return pathBuilder.buildPath(ctx.request().path());
+        return buildPath(ctx.request().path());
     }
 
     public QueryParams createQueryParams(RoutingContext ctx) {

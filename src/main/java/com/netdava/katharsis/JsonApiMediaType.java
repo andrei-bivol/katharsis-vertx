@@ -1,4 +1,4 @@
-package com.netdava.khatarsis;
+package com.netdava.katharsis;
 
 public class JsonApiMediaType {
     /**

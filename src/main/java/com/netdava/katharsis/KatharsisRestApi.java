@@ -1,4 +1,4 @@
-package com.netdava.khatarsis;
+package com.netdava.katharsis;
 
 import com.google.common.base.Throwables;
 import io.katharsis.errorhandling.exception.KatharsisMatchingException;
