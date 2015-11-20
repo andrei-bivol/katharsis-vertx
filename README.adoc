@@ -2,4 +2,13 @@
 
 Integration and example code.
 
+[NOTE]
+====
 Work in progress.
+====
+
+== Contributing
+
+This project uses link:https://github.com/nvie/gitflow[Git Flow].
+Please submit pull-requests for new features and/or bugs.
+
