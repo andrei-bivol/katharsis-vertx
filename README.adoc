@@ -2,24 +2,21 @@
 
 Integration and example code.
 
-[NOTE]
-====
-Work in progress.
-====
+WARNING: Work in progress. Katharsis-Vertx API is not stable yet as we do not support all use cases. Expect change.
 
 == Running
 
-The project uses link:https://gradle.org/[Gradle] as a build tool.
+The project uses https://gradle.org/[Gradle] as a build tool.
 
 In your terminal run these commands:
 ----
- git clone git@github.com:netdava/katharsis-vertx.git
+ git clone git@github.com:katharsis-project/katharsis-vertx.git
  ./gradlew build
- ./gradlew run
+ ./gradlew :examples:simple:run
  echo "Please visit localhost:8080/api/projects or localhost:8080/api/tasks"
 ----
 
-Visit link:localhost:8080/api/projects[] .
+Visit http://localhost:8080/api/projects.
 
 == Contributing
 

@@ -7,7 +7,7 @@ plugins {
 }
 
 dependencies {
-    provided 'org.projectlombok:lombok:1.16.6'
+    provided "org.projectlombok:lombok:${lombokVersion}"
 
     compile "io.katharsis:katharsis-core:${katharsisVersion}"
     compile "io.vertx:vertx-core:${vertxVersion}"
@@ -15,8 +15,7 @@ dependencies {
 
     compile "org.reflections:reflections:${reflectionsVersion}"
 
-    compile 'org.slf4j:slf4j-api:1.7.7'
-    provided 'org.slf4j:slf4j-simple:1.7.7'
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
 
     testCompile "io.vertx:vertx-unit:${vertxVersion}"
     testCompile "junit:junit:4.11"

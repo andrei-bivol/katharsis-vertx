@@ -32,6 +32,7 @@ import io.katharsis.queryParams.DefaultQueryParamsParser;
 import io.katharsis.queryParams.QueryParams;
 import io.katharsis.queryParams.QueryParamsBuilder;
 import io.katharsis.queryParams.QueryParamsParser;
+import io.katharsis.repository.RepositoryMethodParameterProvider;
 import io.katharsis.request.dto.RequestBody;
 import io.katharsis.request.path.JsonPath;
 import io.katharsis.request.path.PathBuilder;
@@ -41,11 +42,15 @@ import io.katharsis.resource.information.ResourceInformationBuilder;
 import io.katharsis.resource.registry.ResourceRegistry;
 import io.katharsis.resource.registry.ResourceRegistryBuilder;
 import io.katharsis.response.BaseResponse;
+import io.katharsis.utils.java.Optional;
 import io.katharsis.utils.parser.TypeParser;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.RoutingContext;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,9 +64,13 @@ import java.util.Set;
 
 @Data
 @Slf4j
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class KatharsisGlue {
 
-    private final ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
+    private ParameterProviderFactory parameterProviderFactory;
 
     private ResourceRegistry resourceRegistry;
     private JsonServiceLocator jsonServiceLocator;
@@ -89,12 +98,16 @@ public class KatharsisGlue {
     private RelationshipsResourcePost relationshipsResourcePost;
     private RelationshipsResourceUpsert relationshipsResourceUpsert;
 
-    private KatharsisGlue(ObjectMapper objectMapper) {
+    private KatharsisGlue(ObjectMapper objectMapper, ParameterProviderFactory factory) {
         this.objectMapper = objectMapper;
+        this.parameterProviderFactory = factory;
     }
 
-    public static KatharsisGlue create(@NonNull String packagesToScan, @NonNull String webPath) {
-        KatharsisGlue katharsisGlue = new KatharsisGlue(Json.mapper);
+    public static KatharsisGlue create(@NonNull String packagesToScan,
+                                       @NonNull String webPath,
+                                       @NonNull ParameterProviderFactory factory) {
+
+        KatharsisGlue katharsisGlue = new KatharsisGlue(Json.mapper, factory);
         katharsisGlue.setWebPath(webPath);
         return katharsisGlue.configure(packagesToScan, webPath);
     }
@@ -116,7 +129,6 @@ public class KatharsisGlue {
         QueryParamsParser paramsParser = new DefaultQueryParamsParser();
 
         QueryParamsBuilder builder = new QueryParamsBuilder(paramsParser);
-
         QueryStringDecoder decoder = new QueryStringDecoder(ctx.request().uri());
 
         decoder.parameters().entrySet().stream()
@@ -152,7 +164,6 @@ public class KatharsisGlue {
         relationshipsResourceGet = new RelationshipsResourceGet(resourceRegistry, typeParser, includeLookupSetter);
         relationshipsResourcePatch = new RelationshipsResourcePatch(resourceRegistry, typeParser);
         relationshipsResourcePost = new RelationshipsResourcePost(resourceRegistry, typeParser);
-        relationshipsResourceUpsert = null;
 
         return this;
     }
@@ -192,7 +203,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return collectionGet.handle(jsonPath, queryParams, parameterProvider, null);
         } catch (KatharsisMappableException e) {
             return toErrorResponse(e);
@@ -204,7 +215,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return resourceGet.handle(jsonPath, queryParams, parameterProvider, null);
         } catch (KatharsisMappableException e) {
             return toErrorResponse(e);
@@ -216,7 +227,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return relationshipsResourceGet.handle(jsonPath, queryParams, parameterProvider, null);
         } catch (KatharsisMappableException e) {
             return toErrorResponse(e);
@@ -228,7 +239,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return fieldResourceGet.handle(jsonPath, queryParams, parameterProvider, null);
         } catch (KatharsisMappableException e) {
             return toErrorResponse(e);
@@ -241,7 +252,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return resourcePost.handle(jsonPath, queryParams, parameterProvider, requestBody(ctx.getBodyAsString()));
         } catch (KatharsisMappableException e) {
             return toErrorResponse(e);
@@ -256,7 +267,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return fieldResourcePost.handle(jsonPath, queryParams, parameterProvider,
                     requestBody(ctx.getBodyAsString()));
         } catch (KatharsisMappableException e) {
@@ -268,7 +279,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return relationshipsResourcePost.handle(jsonPath, queryParams,
                     parameterProvider, requestBody(ctx.getBodyAsString()));
         } catch (KatharsisMappableException e) {
@@ -282,7 +293,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return resourcePatch.handle(jsonPath, queryParams,
                     parameterProvider, requestBody(ctx.getBodyAsString()));
         } catch (KatharsisMappableException e) {
@@ -294,7 +305,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             return relationshipsResourcePatch.handle(jsonPath, queryParams,
                     parameterProvider, requestBody(ctx.getBodyAsString()));
         } catch (KatharsisMappableException e) {
@@ -308,7 +319,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(objectMapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
             // TODO: I think we can pass null for json path and request params
             return resourceDelete.handle(jsonPath, queryParams, parameterProvider, null);
         } catch (KatharsisMappableException e) {
@@ -320,7 +331,7 @@ public class KatharsisGlue {
         try {
             JsonPath jsonPath = buildPath(ctx);
             QueryParams queryParams = createQueryParams(ctx);
-            VertxParameterProvider parameterProvider = new VertxParameterProvider(Json.mapper, ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
 
             return relationshipsResourceDelete.handle(jsonPath, queryParams, parameterProvider,
                     requestBody(ctx.getBodyAsString()));
@@ -334,10 +345,9 @@ public class KatharsisGlue {
     }
 
     public BaseResponse<?> toErrorResponse(@NonNull Throwable e, int statusCode) {
-        io.katharsis.utils.java.Optional<JsonApiExceptionMapper> exceptionMapper =
+        Optional<JsonApiExceptionMapper> exceptionMapper =
                 exceptionMapperRegistry.findMapperFor(e.getClass());
 
-        log.info("Sending message for exception {}", e);
 
         ErrorResponse errorResponse;
         if (exceptionMapper.isPresent()) {

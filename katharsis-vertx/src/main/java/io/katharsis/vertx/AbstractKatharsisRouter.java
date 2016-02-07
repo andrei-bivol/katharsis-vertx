@@ -5,7 +5,7 @@ import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.RoutingContext;
 
-public class AbstractKatharsisRouter {
+public abstract class AbstractKatharsisRouter {
 
     void sendResponse(RoutingContext ctx, BaseResponse<?> response, boolean passToMethodMatcher) {
         if (passToMethodMatcher) {

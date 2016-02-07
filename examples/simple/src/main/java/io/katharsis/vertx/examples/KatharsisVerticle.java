@@ -1,11 +1,13 @@
 package io.katharsis.vertx.examples;
 
+import io.katharsis.vertx.DefaultParameterProviderFactory;
 import io.katharsis.vertx.KatharsisGlue;
 import io.katharsis.vertx.KatharsisRestApi;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import lombok.RequiredArgsConstructor;
 
@@ -23,11 +25,12 @@ public class KatharsisVerticle extends AbstractVerticle {
         router.route("/").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
             response.putHeader("content-type", "text/html")
-                    .write("<h1>Hello from my first Vert.x 3 application</h1>")
-                    .end("<a href='localhost:8080/api/projects'>localhost:8080/api/projects</a>");
+                    .end("<h1>Hello from my first Vert.x 3 application</h1>" +
+                            "<a href='/api/projects'>/api/projects</a>");
         });
 
-        KatharsisGlue katharsisGlue = KatharsisGlue.create(Main.class.getPackage().getName(), "/api");
+        KatharsisGlue katharsisGlue = KatharsisGlue.create(Main.class.getPackage().getName(), "/api",
+                new DefaultParameterProviderFactory(Json.mapper));
 
         router.mountSubRouter("/api/projects", KatharsisRestApi.createRouter(vertx, katharsisGlue));
         router.mountSubRouter("/api/tasks", KatharsisRestApi.createRouter(vertx, katharsisGlue));

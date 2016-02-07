@@ -3,12 +3,16 @@ plugins {
     id 'nebula.provided-base' version '3.0.3'
 
     id 'java'
+    id 'application'
 }
 
 
 dependencies {
-    provided 'org.projectlombok:lombok:1.16.6'
+    provided "org.projectlombok:lombok:${lombokVersion}"
     compile 'com.google.guava:guava:18.0'
     compile project(':katharsis-vertx')
+
+    compile "org.slf4j:slf4j-simple:${slf4jVersion}"
 }
 
+mainClassName = "io.katharsis.vertx.examples.Main"
