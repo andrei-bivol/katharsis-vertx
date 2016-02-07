@@ -1,38 +1,15 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-apply plugin: 'application'
+group 'io.katharsis'
 
-// In this section you declare where to find the dependencies of your project
-repositories {
-    mavenCentral()
-    jcenter()
-}
-
-// In this section you declare the dependencies for your production and test code
-dependencies {
-    compile 'org.projectlombok:lombok:1.16.4'
-    // The production code uses the SLF4J logging API at compile time
-    compile 'io.katharsis:katharsis-core:2.0.1'
-    compile 'io.vertx:vertx-core:3.1.0'
-    compile 'io.vertx:vertx-web:3.1.0'
-
-    compile 'org.slf4j:slf4j-api:1.7.7'
-    compile 'org.slf4j:slf4j-simple:1.7.7'
-
-    testCompile "io.vertx:vertx-unit:3.1.0"
-    testCompile "junit:junit:4.11"
-}
-
-mainClassName = "com.netdava.katharsis.example.Main"
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId 'com.netdava'
-            artifactId 'katharsis-vertx'
-            version '2.0.0-SNAPSHOT'
-
-            from components.java
-        }
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
     }
+
+    ext {
+        katharsisVersion = '2.2.0'
+        vertxVersion = '3.2.0'
+        reflectionsVersion = '0.9.9'
+    }
+
 }

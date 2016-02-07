@@ -1,0 +1,14 @@
+plugins {
+    id 'nebula.optional-base' version '3.0.3'
+    id 'nebula.provided-base' version '3.0.3'
+
+    id 'java'
+}
+
+
+dependencies {
+    provided 'org.projectlombok:lombok:1.16.6'
+    compile 'com.google.guava:guava:18.0'
+    compile project(':katharsis-vertx')
+}
+

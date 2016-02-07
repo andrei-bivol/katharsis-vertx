@@ -1,0 +1,35 @@
+plugins {
+    id 'nebula.optional-base' version '3.0.3'
+    id 'nebula.provided-base' version '3.0.3'
+
+    id 'java'
+    id 'maven-publish'
+}
+
+dependencies {
+    provided 'org.projectlombok:lombok:1.16.6'
+
+    compile "io.katharsis:katharsis-core:${katharsisVersion}"
+    compile "io.vertx:vertx-core:${vertxVersion}"
+    compile "io.vertx:vertx-web:${vertxVersion}"
+
+    compile "org.reflections:reflections:${reflectionsVersion}"
+
+    compile 'org.slf4j:slf4j-api:1.7.7'
+    provided 'org.slf4j:slf4j-simple:1.7.7'
+
+    testCompile "io.vertx:vertx-unit:${vertxVersion}"
+    testCompile "junit:junit:4.11"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'com.netdava'
+            artifactId 'katharsis-vertx'
+            version '2.0.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}
