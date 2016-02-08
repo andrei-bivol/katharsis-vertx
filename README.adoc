@@ -4,19 +4,32 @@ Integration and example code.
 
 WARNING: Work in progress. Katharsis-Vertx API is not stable yet as we do not support all use cases. Expect change.
 
-== Running
+== Building
 
 The project uses https://gradle.org/[Gradle] as a build tool.
 
-In your terminal run these commands:
 ----
- git clone git@github.com:katharsis-project/katharsis-vertx.git
+git clone git@github.com:katharsis-project/katharsis-vertx.git
  ./gradlew build
- ./gradlew :examples:simple:run
- echo "Please visit localhost:8080/api/projects or localhost:8080/api/tasks"
 ----
 
-Visit http://localhost:8080/api/projects.
+== Running examples
+
+After building and running the commands bellow visit http://localhost:8080/api/projects or http://localhost:8080/api/tasks".
+
+Run these commands:
+
+The simple example uses Katharsis inheritance API.
+
+----
+ ./gradlew :examples:simple:run
+----
+
+The spring example uses a simple SpringFramework integration.
+
+----
+ ./gradlew :examples:spring:run
+----
 
 == Contributing
 

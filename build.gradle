@@ -8,10 +8,11 @@ allprojects {
 
     ext {
         katharsisVersion = '2.2.0'
-        vertxVersion = '3.2.0'
+        lombokVersion = '1.16.6'
         reflectionsVersion = '0.9.9'
         slf4jVersion = '1.7.13'
-        lombokVersion = '1.16.6'
+        springVersion = '4.2.4.RELEASE'
+        vertxVersion = '3.2.0'
     }
 
 }

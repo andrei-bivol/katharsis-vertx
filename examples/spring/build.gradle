@@ -4,4 +4,19 @@ plugins {
 
     id 'java'
     id 'maven-publish'
+    id 'application'
 }
+
+dependencies {
+    provided "org.projectlombok:lombok:${lombokVersion}"
+    compile 'com.google.guava:guava:18.0'
+    compile project(':katharsis-vertx')
+
+    compile "org.springframework:spring-beans:${springVersion}"
+    compile "org.springframework:spring-context:${springVersion}"
+    compile "org.springframework:spring-core:${springVersion}"
+
+    compile "org.slf4j:slf4j-simple:${slf4jVersion}"
+}
+
+mainClassName = "io.katharsis.vertx.examples.Main"

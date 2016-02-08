@@ -1,0 +1,55 @@
+package io.katharsis.vertx.examples;
+
+import io.katharsis.vertx.KatharsisGlue;
+import io.katharsis.vertx.KatharsisRestApi;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.Json;
+import io.vertx.ext.web.Router;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
+
+@RequiredArgsConstructor
+public class KatharsisVerticle extends AbstractVerticle {
+
+    final Vertx vertx;
+    final ApplicationContext context;
+
+    @Override
+    public void start(Future<Void> fut) throws Exception {
+        // Create a router object.
+        Router router = Router.router(vertx);
+
+        // Bind "/" to our hello message - so we are still compatible.
+        router.route("/").handler(routingContext -> {
+            HttpServerResponse response = routingContext.response();
+            response.putHeader("content-type", "text/html")
+                    .end("<h1>Hello from Vert.x and Katharsis application</h1>" +
+                            "<a href='/api/projects'>/api/projects</a>");
+        });
+
+        KatharsisGlue katharsisGlue = KatharsisGlue.create(Main.class.getPackage().getName(), "/api",
+                new MyCustomParameterProvider(Json.mapper, context));
+
+        router.mountSubRouter("/api/projects", KatharsisRestApi.createRouter(vertx, katharsisGlue));
+        router.mountSubRouter("/api/tasks", KatharsisRestApi.createRouter(vertx, katharsisGlue));
+
+        // Create the HTTP server and pass the "accept" method to the request handler.
+        vertx.createHttpServer()
+                .requestHandler(router::accept)
+                .listen(
+                        // Retrieve the port from the configuration,
+                        // default to 8080.
+                        config().getInteger("http.port", 8080),
+                        result -> {
+                            if (result.succeeded()) {
+                                fut.complete();
+                            } else {
+                                fut.fail(result.cause());
+                            }
+                        }
+                );
+    }
+}
