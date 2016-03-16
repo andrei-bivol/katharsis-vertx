@@ -7,7 +7,7 @@ allprojects {
     }
 
     ext {
-        katharsisVersion = '2.2.0'
+        katharsisVersion = '2.3.1'
         lombokVersion = '1.16.6'
         reflectionsVersion = '0.9.9'
         slf4jVersion = '1.7.13'
