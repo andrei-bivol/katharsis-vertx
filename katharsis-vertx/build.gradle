@@ -1,13 +1,11 @@
 plugins {
-    id 'nebula.optional-base' version '3.0.3'
-    id 'nebula.provided-base' version '3.0.3'
-
     id 'java'
     id 'maven-publish'
 }
 
 dependencies {
-    provided "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     compile "io.katharsis:katharsis-core:${katharsisVersion}"
     compile "io.vertx:vertx-core:${vertxVersion}"

@@ -1,5 +1,6 @@
 package io.katharsis.vertx.examples.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.katharsis.resource.annotations.JsonApiId;
 import io.katharsis.resource.annotations.JsonApiResource;
 import io.katharsis.resource.annotations.JsonApiToOne;
@@ -21,6 +22,7 @@ public class Task {
     private String name;
 
     @JsonApiToOne
+    @JsonProperty("task-project")
     private Project project;
 
 }

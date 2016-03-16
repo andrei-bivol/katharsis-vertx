@@ -98,6 +98,8 @@ public class KatharsisGlue {
     private RelationshipsResourcePost relationshipsResourcePost;
     private RelationshipsResourceUpsert relationshipsResourceUpsert;
 
+    private final QueryParamsBuilder builder = new QueryParamsBuilder(new DefaultQueryParamsParser());
+
     private KatharsisGlue(ObjectMapper objectMapper, ParameterProviderFactory factory) {
         this.objectMapper = objectMapper;
         this.parameterProviderFactory = factory;
@@ -126,9 +128,7 @@ public class KatharsisGlue {
 
     public QueryParams createQueryParams(RoutingContext ctx) {
         Map<String, Set<String>> transformed = new HashMap<>();
-        QueryParamsParser paramsParser = new DefaultQueryParamsParser();
 
-        QueryParamsBuilder builder = new QueryParamsBuilder(paramsParser);
         QueryStringDecoder decoder = new QueryStringDecoder(ctx.request().uri());
 
         decoder.parameters().entrySet().stream()
