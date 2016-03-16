@@ -1,14 +1,13 @@
 plugins {
-    id 'nebula.optional-base' version '3.0.3'
-    id 'nebula.provided-base' version '3.0.3'
-
     id 'java'
     id 'application'
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
-    provided "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
     compile 'com.google.guava:guava:18.0'
     compile project(':katharsis-vertx')
 

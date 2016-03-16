@@ -1,7 +1,11 @@
 plugins {
     id 'java'
+    id 'idea'
     id 'maven-publish'
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -28,5 +32,11 @@ publishing {
 
             from components.java
         }
+    }
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [ configurations.compileOnly ]
     }
 }
