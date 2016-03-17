@@ -4,6 +4,11 @@ Integration and example code.
 
 WARNING: Work in progress. Katharsis-Vertx API is not stable yet as we do not support all use cases. Expect change.
 
+== Using
+
+We deploy on https://bintray.com . You find detailed descriptions on how to consume this library on the project page
+https://bintray.com/netdava/maven/katharsis-vertx/ . Press `Set me up` button.
+
 == Building
 
 The project uses https://gradle.org/[Gradle] as a build tool.

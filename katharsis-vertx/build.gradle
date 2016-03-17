@@ -30,6 +30,9 @@ bintray {
     user = bintrayUser
     key = bintrayApiKey
     publications = ['katharsis']
+
+    publish = true
+
     pkg {
         repo = 'maven'
         name = 'katharsis-vertx'
