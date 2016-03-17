@@ -31,7 +31,6 @@ import io.katharsis.locator.SampleJsonServiceLocator;
 import io.katharsis.queryParams.DefaultQueryParamsParser;
 import io.katharsis.queryParams.QueryParams;
 import io.katharsis.queryParams.QueryParamsBuilder;
-import io.katharsis.queryParams.QueryParamsParser;
 import io.katharsis.repository.RepositoryMethodParameterProvider;
 import io.katharsis.request.dto.RequestBody;
 import io.katharsis.request.path.JsonPath;
@@ -69,36 +68,30 @@ import java.util.Set;
 @AllArgsConstructor
 public class KatharsisGlue {
 
+    private final QueryParamsBuilder builder = new QueryParamsBuilder(new DefaultQueryParamsParser());
     private ObjectMapper objectMapper;
     private ParameterProviderFactory parameterProviderFactory;
-
     private ResourceRegistry resourceRegistry;
     private JsonServiceLocator jsonServiceLocator;
     private TypeParser typeParser;
     private String webPath;
-
     private ExceptionMapperRegistry exceptionMapperRegistry;
     private PathBuilder pathBuilder;
     private KatharsisExceptionMapper katharsisExceptionMapper;
     private IncludeLookupSetter includeLookupSetter;
-
     private CollectionGet collectionGet;
     private ResourceDelete resourceDelete;
     private ResourceGet resourceGet;
     private ResourcePatch resourcePatch;
     private ResourcePost resourcePost;
     private ResourceUpsert resourceUpsert;
-
     private FieldResourceGet fieldResourceGet;
     private FieldResourcePost fieldResourcePost;
-
     private RelationshipsResourceDelete relationshipsResourceDelete;
     private RelationshipsResourceGet relationshipsResourceGet;
     private RelationshipsResourcePatch relationshipsResourcePatch;
     private RelationshipsResourcePost relationshipsResourcePost;
     private RelationshipsResourceUpsert relationshipsResourceUpsert;
-
-    private final QueryParamsBuilder builder = new QueryParamsBuilder(new DefaultQueryParamsParser());
 
     private KatharsisGlue(ObjectMapper objectMapper, ParameterProviderFactory factory) {
         this.objectMapper = objectMapper;

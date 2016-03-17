@@ -29,7 +29,7 @@ dependencies {
 bintray {
     user = bintrayUser
     key = bintrayApiKey
-    publications = ['katharsis']
+    publications = ['katharsis', 'katharsisSources']
 
     publish = true
 
@@ -45,6 +45,7 @@ bintray {
         labels = ['java', 'json-api', 'rest', 'web', 'api', 'services']
         publicDownloadNumbers = true
         githubRepo = 'katharsis-project/katharsis-vertx'
+
         version {
             name = version
             desc = 'Vertx integration for Katharsis json-api library'
@@ -54,12 +55,25 @@ bintray {
     }
 }
 
+task sourceJar(type: Jar, dependsOn: classes) {
+    classifier 'sources'
+    from sourceSets.main.allJava
+}
+
 publishing {
     publications {
         katharsis(MavenPublication) {
-            groupId 'com.netdava'
+            groupId 'io.katharsis'
             artifactId 'katharsis-vertx'
             from components.java
+        }
+        katharsisSources(MavenPublication) {
+            groupId 'io.katharsis'
+            artifactId 'katharsis-vertx'
+            from components.java
+            artifact sourceJar {
+                classifier 'sources'
+            }
         }
     }
 }
