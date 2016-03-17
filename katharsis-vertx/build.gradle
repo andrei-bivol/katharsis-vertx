@@ -1,6 +1,9 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'java'
     id 'idea'
+    id "com.jfrog.bintray" version "1.6"
     id 'maven-publish'
 }
 
@@ -23,13 +26,31 @@ dependencies {
     testCompile "junit:junit:4.11"
 }
 
+bintray {
+    user = bintrayUser
+    key = bintrayApiKey
+    publications = ['katharsis']
+    pkg {
+        repo = 'maven'
+        name = 'katharsis-vertx'
+        userOrg = 'netdava'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/katharsis-project/katharsis-vertx'
+
+        version {
+            name = version
+            desc = 'Vertx integration for Katharsis json-api library'
+            released = new SimpleDateFormat('yyyy-MM-dd\'T\'HH:mm:ss.SSSZZ').format(new Date())
+            vcsTag = version
+        }
+    }
+}
+
 publishing {
     publications {
-        maven(MavenPublication) {
+        katharsis(MavenPublication) {
             groupId 'com.netdava'
             artifactId 'katharsis-vertx'
-            version '2.0.0-SNAPSHOT'
-
             from components.java
         }
     }
@@ -37,6 +58,6 @@ publishing {
 
 idea {
     module {
-        scopes.PROVIDED.plus += [ configurations.compileOnly ]
+        scopes.PROVIDED.plus += [configurations.compileOnly]
     }
 }
