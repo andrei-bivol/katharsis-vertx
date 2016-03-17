@@ -36,7 +36,12 @@ bintray {
         userOrg = 'netdava'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/katharsis-project/katharsis-vertx'
-
+        websiteUrl = 'http://katharsis.io/'
+        desc = 'Elegant and powerful HATEOAS for Java based on JSON API standard'
+        issueTrackerUrl = 'https://github.com/katharsis-project/katharsis-vertx/issues'
+        labels = ['java', 'json-api', 'rest', 'web', 'api', 'services']
+        publicDownloadNumbers = true
+        githubRepo = 'katharsis-project/katharsis-vertx'
         version {
             name = version
             desc = 'Vertx integration for Katharsis json-api library'

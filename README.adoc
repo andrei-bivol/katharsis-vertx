@@ -31,6 +31,17 @@ The spring example uses a simple SpringFramework integration.
  ./gradlew :examples:spring:run
 ----
 
+== Releasing
+
+Currently we release to https://bintray.com .
+We use https://github.com/ajoberstar/gradle-git plugin to manage releases in git as tags.
+
+Add `bintrayUser` and `bintrayApiKey` to your `~/.gradle/gradle.properties` file and run the bellow command:
+
+----
+    ./gradlew release -Prelease.scope=patch -Prelease.stage=final
+----
+
 == Contributing
 
 Please submit pull-requests for new features and/or bugs.
