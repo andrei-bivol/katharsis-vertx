@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyCustomParameterProvider implements ParameterProviderFactory {
+public class CustomParameterProviderFactory implements ParameterProviderFactory {
 
     private ObjectMapper mapper;
     private ApplicationContext context;

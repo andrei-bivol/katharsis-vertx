@@ -1,6 +1,6 @@
 package io.katharsis.vertx.examples;
 
-import io.katharsis.vertx.KatharsisGlue;
+import io.katharsis.vertx.KatharsisHandlerFactory;
 import io.katharsis.vertx.KatharsisRestApi;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
@@ -30,8 +30,9 @@ public class KatharsisVerticle extends AbstractVerticle {
                             "<a href='/api/projects'>/api/projects</a>");
         });
 
-        KatharsisGlue katharsisGlue = KatharsisGlue.create(Main.class.getPackage().getName(), "/api",
-                new MyCustomParameterProvider(Json.mapper, context));
+        KatharsisHandlerFactory katharsisGlue = KatharsisHandlerFactory.create(Json.mapper,
+                Main.class.getPackage().getName(), "/api",
+                new CustomParameterProviderFactory(Json.mapper, context));
 
         router.mountSubRouter("/api/projects", KatharsisRestApi.createRouter(vertx, katharsisGlue));
         router.mountSubRouter("/api/tasks", KatharsisRestApi.createRouter(vertx, katharsisGlue));

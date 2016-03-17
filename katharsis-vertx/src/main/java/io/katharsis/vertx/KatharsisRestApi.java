@@ -12,19 +12,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class KatharsisRestApi extends AbstractKatharsisRouter {
+public class KatharsisRestApi {
 
     final Vertx vertx;
-    final KatharsisGlue katharsis;
+    final KatharsisHandlerFactory handlerFactory;
     final AuthHandler authHandler;
 
-    public static Router createRouter(Vertx vertx, KatharsisGlue katharsisGlue) {
-        KatharsisRestApi api = new KatharsisRestApi(vertx, katharsisGlue, null);
+    public static Router createRouter(Vertx vertx, KatharsisHandlerFactory handlerFactory) {
+        KatharsisRestApi api = new KatharsisRestApi(vertx, handlerFactory, null);
         return api.createRouter();
     }
 
-    public static Router createRouter(Vertx vertx, KatharsisGlue katharsisGlue, AuthHandler authHandler) {
-        KatharsisRestApi api = new KatharsisRestApi(vertx, katharsisGlue, authHandler);
+    public static Router createRouter(Vertx vertx, KatharsisHandlerFactory handlerFactory, AuthHandler authHandler) {
+        KatharsisRestApi api = new KatharsisRestApi(vertx, handlerFactory, authHandler);
         return api.createRouter();
     }
 
@@ -36,20 +36,33 @@ public class KatharsisRestApi extends AbstractKatharsisRouter {
         }
 
         // http://katharsis.io/#supported-requests
-        router.get("/").blockingHandler(collectionGetHandler());
-        router.get("/:id").blockingHandler(resourceGetHandler());
-        router.get("/:id/relationships/:relationship").blockingHandler(relationshipsGetHandler());
-        router.get("/:id/:field").blockingHandler(fieldGetHandler());
+        router.get("/")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.COLLECTION_GET));
+        router.get("/:id")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RESOURCE_GET));
 
-        router.post("/").blockingHandler(resourcePostHandler());
-        router.post("/:id/:field").blockingHandler(fieldPostHandler());
-        router.post("/:id/relationships/:relationship").blockingHandler(relationshipPostHandler());
+        router.get("/:id/relationships/:relationship")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RELATIONSHIP_GET));
 
-        router.patch("/:id").blockingHandler(resourcePatchHandler());
-        router.patch("/:id/relationships/:relationship").blockingHandler(relationshipPatchHandler());
+        router.get("/:id/:field")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.FIELD_GET));
 
-        router.delete("/:id").blockingHandler(resourceDeleteHandler());
-        router.delete("/:id/relationships/:relationship").blockingHandler(relationshipDeleteHandler());
+        router.post("/")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RELATIONSHIP_POST));
+        router.post("/:id/:field")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.FIELD_POST));
+        router.post("/:id/relationships/:relationship")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RELATIONSHIP_POST));
+
+        router.patch("/:id")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RESOURCE_PATCH));
+        router.patch("/:id/relationships/:relationship")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RELATIONSHIP_PATCH));
+
+        router.delete("/:id")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RESOURCE_DELETE));
+        router.delete("/:id/relationships/:relationship")
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RELATIONSHIP_DELETE));
 
         return router;
     }
