@@ -1,8 +1,5 @@
 package io.katharsis.vertx;
 
-import com.google.common.base.Throwables;
-import io.katharsis.errorhandling.exception.KatharsisMatchingException;
-import io.katharsis.response.BaseResponse;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.AuthHandler;
@@ -38,196 +35,23 @@ public class KatharsisRestApi extends AbstractKatharsisRouter {
             router.route().handler(authHandler);
         }
 
-        router.get("/").blockingHandler(ctx -> {
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
-                response = katharsis.collectionGet(ctx);
-            } catch (KatharsisMatchingException e) {
-                passToMethodMatcher = true;
-            } catch (Exception e1) {
-                response = katharsis.toErrorResponse(e1);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-        });
+        // http://katharsis.io/#supported-requests
+        router.get("/").blockingHandler(collectionGetHandler());
+        router.get("/:id").blockingHandler(resourceGetHandler());
+        router.get("/:id/relationships/:relationship").blockingHandler(relationshipsGetHandler());
+        router.get("/:id/:field").blockingHandler(fieldGetHandler());
 
-        router.get("/:id").blockingHandler(ctx -> {
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
-                response = katharsis.resourceGet(ctx);
-            } catch (KatharsisMatchingException e) {
-                log.error("Error {}", e);
-                passToMethodMatcher = true;
-            } catch (Exception e1) {
-                response = katharsis.toErrorResponse(e1);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-        });
+        router.post("/").blockingHandler(resourcePostHandler());
+        router.post("/:id/:field").blockingHandler(fieldPostHandler());
+        router.post("/:id/relationships/:relationship").blockingHandler(relationshipPostHandler());
 
-        router.delete("/:id").blockingHandler(ctx -> {
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
-                response = katharsis.resourceDelete(ctx);
-            } catch (Exception e) {
-                throw Throwables.propagate(e);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-        });
+        router.patch("/:id").blockingHandler(resourcePatchHandler());
+        router.patch("/:id/relationships/:relationship").blockingHandler(relationshipPatchHandler());
 
-        router.get("/:id/relationships/:relationship").blockingHandler(ctx -> {
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
-                response = katharsis.relationshipsResourceGet(ctx);
-            } catch (KatharsisMatchingException e) {
-                log.error("Error relationship {}", e);
-                passToMethodMatcher = true;
-            } catch (Exception e1) {
-                response = katharsis.toErrorResponse(e1);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-
-        });
-
-        router.get("/:id/:field").blockingHandler(ctx -> {
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
-                response = katharsis.fieldResourceGet(ctx);
-            } catch (KatharsisMatchingException e) {
-                log.error("Error {}", e);
-                passToMethodMatcher = true;
-            } catch (Exception e1) {
-                response = katharsis.toErrorResponse(e1);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-        });
-
-        router.post("/").blockingHandler(ctx -> {
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
-                response = katharsis.resourcePost(ctx);
-            } catch (KatharsisMatchingException e) {
-                log.error("Error {}", e);
-                passToMethodMatcher = true;
-            } catch (Exception e1) {
-                response = katharsis.toErrorResponse(e1);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-        });
-
-        router.post("/:id/:field").blockingHandler(ctx -> {
-
-            ctx.request().bodyHandler(requestBody -> {
-                BaseResponse<?> response = null;
-                boolean passToMethodMatcher = false;
-                try {
-                    response = katharsis.fieldResourcePost(ctx);
-                } catch (KatharsisMatchingException e) {
-                    log.error("Error {}", e);
-                    passToMethodMatcher = true;
-                } catch (Exception e1) {
-                    response = katharsis.toErrorResponse(e1);
-                } finally {
-                    sendResponse(ctx, response, passToMethodMatcher);
-                }
-            });
-
-        });
-
-        router.post("/:id/relationships/:relationship").blockingHandler(ctx -> {
-
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
-                response = katharsis.relationshipsResourcePost(ctx);
-            } catch (KatharsisMatchingException e) {
-                log.error("Error {}", e);
-                passToMethodMatcher = true;
-            } catch (Exception e1) {
-                response = katharsis.toErrorResponse(e1);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-        });
-
-        router.patch("/:id").blockingHandler(ctx -> {
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
-                response = katharsis.resourcePatch(ctx);
-            } catch (KatharsisMatchingException e) {
-                log.error("Error {}", e);
-                passToMethodMatcher = true;
-            } catch (Exception e1) {
-                response = katharsis.toErrorResponse(e1);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-        });
-
-        router.patch("/:id/relationships/:relationship").blockingHandler(ctx -> {
-
-            ctx.request().bodyHandler(requestBody -> {
-                BaseResponse<?> response = null;
-                boolean passToMethodMatcher = false;
-                try {
-                    response = katharsis.relationshipsResourcePatch(ctx);
-                } catch (KatharsisMatchingException e) {
-                    log.error("Error {}", e);
-                    passToMethodMatcher = true;
-                } catch (Exception e1) {
-                    response = katharsis.toErrorResponse(e1);
-                } finally {
-                    sendResponse(ctx, response, passToMethodMatcher);
-                }
-            });
-        });
-
-        router.delete("/:id").blockingHandler(ctx -> {
-            ctx.request().bodyHandler(requestBody -> {
-                BaseResponse<?> response = null;
-                boolean passToMethodMatcher = false;
-                try {
-                    response = katharsis.resourceDelete(ctx);
-                } catch (KatharsisMatchingException e) {
-                    log.error("Error {}", e);
-                    passToMethodMatcher = true;
-                } catch (Exception e1) {
-                    response = katharsis.toErrorResponse(e1);
-                } finally {
-                    sendResponse(ctx, response, passToMethodMatcher);
-                }
-            });
-        });
-
-        router.delete("/:id/relationships/:relationship").blockingHandler(ctx -> {
-            ctx.request().bodyHandler(requestBody -> {
-                BaseResponse<?> response = null;
-                boolean passToMethodMatcher = false;
-                try {
-                    response = katharsis.relationshipsResourceDelete(ctx);
-
-                } catch (KatharsisMatchingException e) {
-                    log.error("Error {}", e);
-                    passToMethodMatcher = true;
-                } catch (Exception e1) {
-                    response = katharsis.toErrorResponse(e1);
-                } finally {
-                    sendResponse(ctx, response, passToMethodMatcher);
-                }
-            });
-        });
+        router.delete("/:id").blockingHandler(resourceDeleteHandler());
+        router.delete("/:id/relationships/:relationship").blockingHandler(relationshipDeleteHandler());
 
         return router;
     }
+
 }

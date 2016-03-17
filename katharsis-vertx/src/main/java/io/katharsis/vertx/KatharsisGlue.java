@@ -111,7 +111,7 @@ public class KatharsisGlue {
         //TODO; path need to be cleaned
         String cleaned = Paths.get(path).toString();
         String transformed = cleaned.substring(webPath.length());
-        log.info("Path is {}", transformed);
+        log.trace("Path is {}", transformed);
         return pathBuilder.buildPath(transformed);
     }
 
