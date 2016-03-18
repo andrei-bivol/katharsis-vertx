@@ -130,7 +130,7 @@ public class KatharsisHandler implements Handler<RoutingContext> {
     }
 
     public RequestBody requestBody(String body) {
-        if (body == null) {
+        if (body == null || body.length() == 0) {
             return null;
         }
         return Json.decodeValue(body, RequestBody.class);
