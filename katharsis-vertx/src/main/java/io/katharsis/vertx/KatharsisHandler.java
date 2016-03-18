@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,27 +70,26 @@ public class KatharsisHandler implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext ctx) {
-        ctx.request().bodyHandler(requestBody -> {
-            BaseResponse<?> response = null;
-            boolean passToMethodMatcher = false;
-            try {
+        BaseResponse<?> response = null;
+        boolean passToMethodMatcher = false;
+        try {
 
-                JsonPath jsonPath = buildPath(ctx);
-                QueryParams queryParams = createQueryParams(ctx);
-                RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
+            JsonPath jsonPath = buildPath(ctx);
+            QueryParams queryParams = createQueryParams(ctx);
+            RepositoryMethodParameterProvider parameterProvider = parameterProviderFactory.provider(ctx);
 
-                String bodyAsString = requestBody.toString(StandardCharsets.UTF_8);
-                response = controller.handle(jsonPath, queryParams, parameterProvider, requestBody(bodyAsString));
+            String bodyAsString = ctx.getBodyAsString();
+            response = controller.handle(jsonPath, queryParams, parameterProvider, requestBody(bodyAsString));
 
-            } catch (KatharsisMatchingException e) {
-                log.error("Error {}", e);
-                passToMethodMatcher = true;
-            } catch (Exception e1) {
-                response = toErrorResponse(e1);
-            } finally {
-                sendResponse(ctx, response, passToMethodMatcher);
-            }
-        });
+        } catch (KatharsisMatchingException e) {
+            log.error("Error {}", e);
+            passToMethodMatcher = true;
+        } catch (Exception e1) {
+            response = toErrorResponse(e1);
+        } finally {
+            sendResponse(ctx, response, passToMethodMatcher);
+        }
+
     }
 
     public BaseResponse<?> toErrorResponse(@NonNull Throwable e) {
