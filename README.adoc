@@ -18,11 +18,20 @@ https://bintray.com/netdava/maven/katharsis-vertx/ . Press `Set me up` button.
 
 .Use in your code
 ----
-        KatharsisHandlerFactory katharsisGlue = KatharsisHandlerFactory.create("package.to.scan", "/api");
+    Router katharsisRouter = KatharsisRestApi.createRouter(vertx, "package.to.scan", "/api");
+    router.mountSubRouter("/api/projects", katharsisRouter);
+    router.mountSubRouter("/api/tasks", katharsisRouter);
+----
 
-        Router katharsisRouter = KatharsisRestApi.createRouter(vertx, katharsisGlue);
-        router.mountSubRouter("/api/projects", katharsisRouter);
-        router.mountSubRouter("/api/tasks", katharsisRouter);
+.Advanced usage
+----
+    ParameterProviderFactory factory = new SpringParameterProviderFactory(Json.mapper, context);
+    KatharsisHandlerFactory katharsisGlue = KatharsisHandlerFactory.create(Main.class.getPackage().getName(), "/api",
+            Json.mapper, factory);
+
+    Router katharsisRouter = KatharsisRestApi.createRouter(vertx, katharsisGlue);
+    router.mountSubRouter("/api/projects", katharsisRouter);
+    router.mountSubRouter("/api/tasks", katharsisRouter);
 ----
 
 

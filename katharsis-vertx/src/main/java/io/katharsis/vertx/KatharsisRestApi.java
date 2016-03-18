@@ -5,6 +5,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.AuthHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +18,12 @@ public class KatharsisRestApi {
     final Vertx vertx;
     final KatharsisHandlerFactory handlerFactory;
     final AuthHandler authHandler;
+
+    public static Router createRouter(@NonNull Vertx vertx, @NonNull String packagesToScan, @NonNull String webPath) {
+        KatharsisHandlerFactory factory = KatharsisHandlerFactory.create(packagesToScan, webPath);
+        KatharsisRestApi api = new KatharsisRestApi(vertx, factory, null);
+        return api.createRouter();
+    }
 
     public static Router createRouter(Vertx vertx, KatharsisHandlerFactory handlerFactory) {
         KatharsisRestApi api = new KatharsisRestApi(vertx, handlerFactory, null);
