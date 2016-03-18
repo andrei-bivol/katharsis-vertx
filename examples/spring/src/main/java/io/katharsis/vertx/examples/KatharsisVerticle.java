@@ -30,9 +30,8 @@ public class KatharsisVerticle extends AbstractVerticle {
                             "<a href='/api/projects'>/api/projects</a>");
         });
 
-        KatharsisHandlerFactory katharsisGlue = KatharsisHandlerFactory.create(Json.mapper,
-                Main.class.getPackage().getName(), "/api",
-                new CustomParameterProviderFactory(Json.mapper, context));
+        KatharsisHandlerFactory katharsisGlue = KatharsisHandlerFactory.create(Main.class.getPackage().getName(), "/api",
+                Json.mapper, new CustomParameterProviderFactory(Json.mapper, context));
 
         Router katharsisRouter = KatharsisRestApi.createRouter(vertx, katharsisGlue);
 

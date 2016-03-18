@@ -29,6 +29,7 @@ import io.katharsis.resource.registry.ResourceRegistry;
 import io.katharsis.resource.registry.ResourceRegistryBuilder;
 import io.katharsis.utils.parser.TypeParser;
 import io.vertx.core.Handler;
+import io.vertx.core.json.Json;
 import io.vertx.ext.web.RoutingContext;
 import lombok.NonNull;
 
@@ -77,16 +78,22 @@ public class KatharsisHandlerFactory {
 
     }
 
-    public static KatharsisHandlerFactory create(@NonNull ObjectMapper objectMapper,
-                                                 @NonNull String packagesToScan,
+    public static KatharsisHandlerFactory create(@NonNull String packagesToScan,
                                                  @NonNull String webPath) {
 
-        return create(objectMapper, packagesToScan, webPath, new DefaultParameterProviderFactory());
+        return create(packagesToScan, webPath, Json.mapper);
     }
 
-    public static KatharsisHandlerFactory create(@NonNull ObjectMapper objectMapper,
-                                                 @NonNull String packagesToScan,
+    public static KatharsisHandlerFactory create(@NonNull String packagesToScan,
                                                  @NonNull String webPath,
+                                                 @NonNull ObjectMapper objectMapper) {
+
+        return create(packagesToScan, webPath, objectMapper, new DefaultParameterProviderFactory());
+    }
+
+    public static KatharsisHandlerFactory create(@NonNull String packagesToScan,
+                                                 @NonNull String webPath,
+                                                 @NonNull ObjectMapper objectMapper,
                                                  @NonNull ParameterProviderFactory parameterProviderFactory) {
 
         TypeParser typeParser = new TypeParser();

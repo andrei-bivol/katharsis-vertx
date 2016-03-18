@@ -6,7 +6,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.json.Json;
 import io.vertx.ext.web.Router;
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +27,7 @@ public class KatharsisVerticle extends AbstractVerticle {
                             "<a href='/api/projects'>/api/projects</a>");
         });
 
-        KatharsisHandlerFactory katharsisGlue = KatharsisHandlerFactory.create(Json.mapper, Main.class.getPackage().getName(), "/api");
+        KatharsisHandlerFactory katharsisGlue = KatharsisHandlerFactory.create(Main.class.getPackage().getName(), "/api");
 
         Router katharsisRouter = KatharsisRestApi.createRouter(vertx, katharsisGlue);
         router.mountSubRouter("/api/projects", katharsisRouter);
