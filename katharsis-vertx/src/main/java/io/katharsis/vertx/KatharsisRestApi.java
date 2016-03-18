@@ -2,7 +2,6 @@ package io.katharsis.vertx;
 
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.AuthHandler;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,32 +16,18 @@ public class KatharsisRestApi {
 
     final Vertx vertx;
     final KatharsisHandlerFactory handlerFactory;
-    final AuthHandler authHandler;
-
-    private boolean useJsonMediaType = true;
 
     public static Router createRouter(@NonNull Vertx vertx, @NonNull String packagesToScan, @NonNull String webPath) {
         return createRouter(vertx, KatharsisHandlerFactory.create(packagesToScan, webPath));
     }
 
     public static Router createRouter(Vertx vertx, KatharsisHandlerFactory handlerFactory) {
-        return createRouter(vertx, handlerFactory, null);
-    }
-
-    public static Router createRouter(Vertx vertx, KatharsisHandlerFactory handlerFactory, AuthHandler authHandler) {
-        KatharsisRestApi api = new KatharsisRestApi(vertx, handlerFactory, authHandler, true);
+        KatharsisRestApi api = new KatharsisRestApi(vertx, handlerFactory);
         return api.createRouter();
     }
 
     private Router createRouter() {
         Router router = Router.router(vertx);
-
-        if (authHandler != null) {
-            router.route().handler(authHandler);
-        }
-        if (useJsonMediaType) {
-            router.route().handler(JsonApiMediaTypeHandler.INSTANCE);
-        }
 
         // http://katharsis.io/#supported-requests
         router.get("/")
