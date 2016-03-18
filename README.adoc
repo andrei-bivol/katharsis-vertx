@@ -9,6 +9,23 @@ WARNING: Work in progress. Katharsis-Vertx API is not stable yet as we do not su
 We deploy on https://bintray.com . You find detailed descriptions on how to consume this library on the project page
 https://bintray.com/netdava/maven/katharsis-vertx/ . Press `Set me up` button.
 
+.Add the dependency
+----
+    dependencies {
+        compile 'io.katharsis:katharsis-vertx:<version>'
+    }
+----
+
+.Use in your code
+----
+        KatharsisHandlerFactory katharsisGlue = KatharsisHandlerFactory.create("package.to.scan", "/api");
+
+        Router katharsisRouter = KatharsisRestApi.createRouter(vertx, katharsisGlue);
+        router.mountSubRouter("/api/projects", katharsisRouter);
+        router.mountSubRouter("/api/tasks", katharsisRouter);
+----
+
+
 == Building
 
 The project uses https://gradle.org/[Gradle] as a build tool.
