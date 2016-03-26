@@ -66,11 +66,13 @@ publishing {
             groupId 'io.katharsis'
             artifactId 'katharsis-vertx'
             from components.java
+            version version.toString()
         }
         katharsisSources(MavenPublication) {
             groupId 'io.katharsis'
             artifactId 'katharsis-vertx'
             from components.java
+            version version.toString()
             artifact sourceJar {
                 classifier 'sources'
             }
