@@ -27,6 +27,9 @@ dependencies {
 }
 
 bintray {
+
+    def projectVersion = version
+
     user = bintrayUser
     key = bintrayApiKey
     publications = ['katharsis', 'katharsisSources']
@@ -47,10 +50,10 @@ bintray {
         githubRepo = 'katharsis-project/katharsis-vertx'
 
         version {
-            name = version.toString()
+            name = projectVersion.toString()
             desc = 'Vertx integration for Katharsis json-api library'
             released = new SimpleDateFormat('yyyy-MM-dd\'T\'HH:mm:ss.SSSZZ').format(new Date())
-            vcsTag = version.toString()
+            vcsTag = projectVersion.toString()
         }
     }
 }
@@ -66,13 +69,11 @@ publishing {
             groupId 'io.katharsis'
             artifactId 'katharsis-vertx'
             from components.java
-            version version.toString()
         }
         katharsisSources(MavenPublication) {
             groupId 'io.katharsis'
             artifactId 'katharsis-vertx'
             from components.java
-            version version.toString()
             artifact sourceJar {
                 classifier 'sources'
             }
