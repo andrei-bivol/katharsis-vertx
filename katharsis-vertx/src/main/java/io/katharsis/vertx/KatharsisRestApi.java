@@ -42,7 +42,7 @@ public class KatharsisRestApi {
                 .blockingHandler(handlerFactory.handle(JsonApiCall.FIELD_GET));
 
         router.post("/")
-                .blockingHandler(handlerFactory.handle(JsonApiCall.RELATIONSHIP_POST));
+                .blockingHandler(handlerFactory.handle(JsonApiCall.RESOURCE_POST));
         router.post("/:id/:field")
                 .blockingHandler(handlerFactory.handle(JsonApiCall.FIELD_POST));
         router.post("/:id/relationships/:relationship")
